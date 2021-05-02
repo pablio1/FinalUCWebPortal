@@ -1,0 +1,24 @@
+//Custom
+$theme-color-highlight: hsla(215, 100%, 66%, 1); 
+$theme-color-shadow: hsla(215, 100%, 76%, 1);
+$theme-color-panel-heading-background: hsla(215, 100%, 76%, 1);
+$theme-color-panel-heading: black;
+
+$theme-size-panel-heading: 1.1em;
+
+//Bulma Variables
+$menu-item-hover-background-color: $theme-color-shadow;
+$menu-item-active-background-color: $theme-color-highlight;
+$panel-heading-background-color: $theme-color-panel-heading-background;
+$panel-heading-color: $theme-color-panel-heading;
+$panel-heading-size: $theme-size-panel-heading;
+
+$table-row-active-background-color: $theme-color-shadow;
+
+// Override for bulma divider 
+$divider-margin-inner-size: 0px;
+// Override for Bulma steps
+$steps-completed-color:	hsl(204, 86%, 53%);
+$steps-active-color: hsl(204, 86%, 53%);
+
+$calendar-border: .1rem solid red;

@@ -1,0 +1,16 @@
+//Custom
+$sidebar-width: 17rem;
+//$sidebar-height:calc(100vh - #{$navbar-height});
+//$sidebar-min-height:calc(100vh - #{$navbar-height});
+//$sidebar-max-height:calc(100vh - #{$navbar-height});
+$sidebar-height:100vh;
+$sidebar-min-height:40vh;
+$sidebar-max-height:100vh;
+$content-height:100%;
+
+$sidebar-breakpoint: 1582px;
+$sidebar-mini-width: 4.45rem;
+
+$desktop-br: calc(#{$tablet} + 255px);
+$tablet-br: calc(#{$tablet} - 1px);
+

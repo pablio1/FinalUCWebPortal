@@ -1,0 +1,25 @@
+{
+  "short_name": "UC Web Portal",
+  "name": "University of Cebu Web portal",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "uc-logo-bg-160x83.png",
+      "type": "image/png",
+      "sizes": "160x83"
+    },
+    {
+      "src": "uc-logo-bg-250x130.png",
+      "type": "image/png",
+      "sizes": "250x130"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}

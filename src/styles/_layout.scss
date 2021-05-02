@@ -1,0 +1,145 @@
+.landing-page-body {
+    background: rgb(46,195,242);
+    background: radial-gradient(circle, rgba(46,195,242,1) 0%, rgba(20,77,148,1) 71%, rgba(7,42,87,1) 100%);
+}
+.default-page-body {
+    background: rgb(255,255,255);
+    background: linear-gradient(198deg, rgba(255,255,255,1) 0%, rgba(215,245,255,1) 100%);
+}
+.globe-background {
+    background-image: url("../assets/sysimg/uc-globe-large.PNG");
+    background-position: right -200px bottom -100px;
+    background-repeat: no-repeat; 
+    background-size: 50%;
+    opacity: 0.5;
+}
+.box {
+    //overflow-y:auto;
+    &.is-full-height {
+        min-height: 80vh;    
+    }
+    &.is-center {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    } 
+    &.is-hcenter {
+        display: flex;
+        justify-content: center;
+    } 
+}
+:empty.divider:before { margin-right: 0; } 
+:empty.divider:after { margin-left: 0; }
+
+.is-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.is-hcenter {
+    display: flex;
+    justify-content: center;
+} 
+.is-vcenter {
+    display: flex;
+    align-items: center;
+}
+.is-clickable {
+    cursor: pointer;
+}
+.section {
+    &.is-sidebar {        
+        height: $sidebar-height;
+        position: relative;
+        z-index: 2;     
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 4px 8px 0 rgba(0, 0, 0, 0.19); 
+        @include breakpoint(desktop){
+            width: $sidebar-width;
+        }
+        @include breakpoint(tablet){ 
+            width: $sidebar-mini-width;
+        }
+        .is-sidebar-item {
+           padding-left: 16px; 
+           white-space: nowrap;           
+           .is-sidebar-item-label {
+                padding-left: 5px;               
+                @include breakpoint(tablet){ 
+                    display: none;                
+                }                 
+           }           
+        }
+        .is-sidebar-subitem {
+            padding-left: 25px; 
+            white-space: nowrap;           
+            .is-sidebar-subitem-label {
+                 padding-left: 5px;               
+                 @include breakpoint(tablet){ 
+                     display: none;                
+                 }                 
+            }           
+         }
+        .is-sidebar-user {
+            border-bottom: 1px solid rgb(205, 233, 247);  
+            .is-sidebar-user-info {
+                white-space: nowrap;                                                      
+                @include breakpoint(tablet){               
+                    display: none;                                       
+                }                           
+            }            
+        }       
+        &:hover {
+            @include breakpoint(tablet){                                
+                width: $sidebar-width;     
+                .is-sidebar-item-label {
+                    display: inline-block; 
+                }
+                .is-sidebar-subitem-label {
+                    display: inline-block; 
+                }
+                .is-sidebar-user-info {
+                    display: inline-block;
+                }                 
+            }
+        }
+        @include transition(width, 0.5s, ease);        
+    }
+    &.is-content {  
+        z-index: 1;
+        height: $content-height;
+        @include breakpoint(desktop){ 
+            width: calc(100vw - (#{$sidebar-width} + 1.5rem)); 
+        }
+        @include breakpoint(tablet){ 
+            width: calc(100vw - (#{$sidebar-mini-width} + 1.5rem)); 
+        } 
+        @include breakpoint(mobile) { width: calc(100vw - 1.5rem); }
+
+        .content-nav {
+            display: inline-block;
+            margin-bottom: .3rem;
+            @include breakpoint(desktop){ width: calc(100vw - (#{$sidebar-width} + 3rem)); };
+            @include breakpoint(touch){ width: calc(100vw - 2.5rem); };
+            @include breakpoint(tablet){ width: calc(100vw - (#{$sidebar-mini-width} + 3rem)); } 
+            @include breakpoint(mobile) { width: calc(100vw - 3rem); }
+        }
+        .box {
+            border-top: 2px solid;
+            border-color: $theme-color-highlight;
+            overflow-y:auto;
+        }
+    }
+}
+
+
+
+td {
+    &.valign {
+        vertical-align : middle;
+    }    
+}
+
+
+
+
+

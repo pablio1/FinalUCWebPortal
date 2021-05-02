@@ -1,0 +1,58 @@
+{
+    "users": [
+      {
+        "id_number": "810514",
+        "password": "$2a$10$2myKMolZJoH.q.cyXClQXufY1Mc7ETKdSaQQCC6Fgtbe0DCXRBELG",
+        "type": "admin",
+        "email": "admin@uc.edu.ph"
+      },
+      {
+        "id_number": "20512345",
+        "password": "$2a$10$w8qB40MdYkMs3dgGGf0Pu.xxVOOzWdZ5/Nrkleo3Gqc88PF/OQhOG",
+        "type": "student",
+        "email": "student@uc.edu.ph"
+      }
+    ],
+    "notifications": [
+      {
+        "id": "1",
+        "type": "danger",
+        "msg": "You have pending documents to be submitted...",
+        "datetime": "2020-11-07 13:51:16",
+        "status": "unread"
+      },
+      {
+        "id": "2",
+        "type": "info",
+        "msg": "We have received your payment...",
+        "datetime": "2020-11-02 04:46:38",
+        "status": "unread"
+      },
+      {
+        "id": "3",
+        "type": "warning",
+        "msg": "Please update you personal details...",
+        "datetime": "2020-11-04 00:35:29",
+        "status": "unread"
+      },
+      {
+        "id": "4",
+        "type": "info",
+        "msg": "New schedule has been opened...",
+        "datetime": "2020-11-06 13:24:25",
+        "status": "read"
+      },
+      {
+        "id": "5",
+        "type": "danger",
+        "msg": "One of your subjects has been desolved...",
+        "datetime": "2020-11-07 04:50:54",
+        "status": "read"
+      }
+    ]
+  }
+  
+
+
+
+

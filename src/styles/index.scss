@@ -1,0 +1,27 @@
+// Fonts
+@import '~@fortawesome/fontawesome-free/css/all.css';
+//@import url('https://fonts.googleapis.com/css?family=Nunito');
+
+// Override Bulma Variables
+@import 'initvars';
+
+// Bulma
+@import "~bulma/bulma.sass"; 
+// Bulma component
+@import '~@creativebulma/bulma-badge/dist/bulma-badge.min.css';
+@import '~@creativebulma/bulma-tooltip/dist/bulma-tooltip.min.css';
+@import '~@creativebulma/bulma-divider/dist/bulma-divider.min.css';
+@import '~bulma-calendar/dist/css/bulma-calendar.min.css';
+@import '~bulma-switch/dist/css/bulma-switch.sass';
+@import '~bulma-steps-component/bulma-steps.sass';
+@import '~bulma-pageloader/src/sass/index.sass';
+@import '~@creativebulma/bulma-collapsible';
+@import '~animate.css/animate.min.css';
+
+// Variables
+@import 'variables';
+// Mixins
+@import 'mixins';
+// Customs CSS
+@import 'layout';
+@import 'styles';
