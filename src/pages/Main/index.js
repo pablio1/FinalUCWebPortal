@@ -48,6 +48,7 @@ import { Curriculum, CurriculumHeader } from '../Curriculum';
 import { userModulesPermission } from '../../helpers/configObjects';
 import { getLoggedUserDetails, convertTermToReadable } from '../../helpers/helper';
 
+import { SchedulesRequest, SchedulesRequestHeader } from '../Schedules/SchedulesRequest';
 
 class Layout extends Component {
     static propTypes = {
@@ -451,7 +452,8 @@ class Layout extends Component {
                                                         <Route path="/behind" component={BehindSubjectHeader} /> 
                                                         <Route path="/suggestion" component={SuggestionHeader} />
                                                         <Route path="/requestsubject" component={RequestSubjectHeader} />  
-                                                        <Route path="/curriculum" component={CurriculumHeader} />                                
+                                                        <Route path="/curriculum" component={CurriculumHeader} />  
+                                                        <Route path="/schedules/request" component={SchedulesRequestHeader} />                                
                                                         <Route component={ERR404Header} />
                                                     </Switch>                                   
                                                 </div>
@@ -495,7 +497,8 @@ class Layout extends Component {
                                                     <Route path="/behind" component={BehindSubject} />  
                                                     <Route path="/suggestion" component={Suggestion} /> 
                                                     <Route path="/requestsubject" component={RequestSubjects} />  
-                                                    <Route path="/curriculum" component={Curriculum} />                                    
+                                                    <Route path="/curriculum" component={Curriculum} />  
+                                                    <Route path="/schedules/request" component={SchedulesRequest} />                                    
                                                     <Route component={ERR404} />
                                                 </Switch>                
                                             </div>   

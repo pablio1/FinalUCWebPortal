@@ -5,7 +5,7 @@ export default class SearchRequestSubject extends Component {
   render() {
     const{requestSubjects,requestedSubjects,handleAddSubjectButton} = this.props
     var count=0;
-    var loadListRequestedSubject = requestSubjects ? requestSubjects.map((list, index) => {
+    var loadListRequestedSubject = requestSubjects ? requestSubjects.filter(fil=> fil.status != 3 || fil.size != 0).map((list, index) => {
         if(!checkRequestedSubject(requestedSubjects,list.internal_code))
         {
             count++;
@@ -15,7 +15,8 @@ export default class SearchRequestSubject extends Component {
                     <td className="has-text-centered"></td>
                     <td className="has-text-centered">{list.days}</td>
                     <td className="has-text-centered">{list.time_start}-{list.time_end} {list.mdn}</td>
-                    <th className="has-text-centered">{list.status}</th>
+                    <td className="has-text-centered">{list.size}</td>
+                    <td className="has-text-centered">{list.status != 3 ? "Pending":""}</td>
                     <td className="has-text-centered">
                         <button className="button is-info is-small" onClick={() => handleAddSubjectButton(list.internal_code)}>Add</button>
                     </td>
@@ -58,6 +59,7 @@ export default class SearchRequestSubject extends Component {
                                 <th className="has-text-centered">Type</th>
                                 <th className="has-text-centered">Days</th>
                                 <th className="has-text-centered">Time</th>
+                                <th className="has-text-centered">Size</th>
                                 <th className="has-text-centered">Status</th>
                                 <th className="has-text-centered">Actions</th>
                             </tr>

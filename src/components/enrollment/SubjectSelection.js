@@ -10,6 +10,7 @@ import { saveSubjectsSchedules, getSchedules, getStudentInfo, getStudentSavedSch
 import SelectedSubjects from '../../components/enrollment/SelectedSubjects';
 import SearchSubjects from '../../components/enrollment/SearchSubjects';
 import PaginateRecords from '../../components/elements/PaginateRecords';
+import Suggestion from '../../components/elements/SuggestSubject';
 
 class SubjectSelection extends Component {
     static propTypes = {
@@ -21,7 +22,7 @@ class SubjectSelection extends Component {
         totalUnitsSelected: 0, yearLevel: 0, session: '', 
         has_nstp: 3, has_pe: 3, assignedSection: '', isSelectedPe: false, isSelectedNstp: false, department_abbr: '', totalRowsCount: 0, pageNum: 1, rowsPerPage: 20,
         disableAcceptBtn: false, disableSubmitBtn: false, sections: '', courses: '',
-        selectionType: '', adjustOrigSubjects: null,
+        selectionType: '', adjustOrigSubjects: null, viewSuggestion: false
     }
     componentDidMount = () => {
         const { cookies } = this.props;
@@ -98,6 +99,12 @@ class SubjectSelection extends Component {
                 });
             }
         });     
+    }
+    handleOnClickSuggestion = () => {
+        const {viewSuggestion} = this.state;
+        this.setState({
+            viewSuggestion: !viewSuggestion
+        })
     }
     handleOnChangeInput = e => {
         const { cookies } = this.props;
@@ -493,7 +500,7 @@ class SubjectSelection extends Component {
         const { 
             studentInfo, selectedSubjects, showOverloadError, showConflictError, errorMsg, maxUnitsAllowed, totalRowsCount, rowsPerPage, pageNum, sections, courses,
             searchedSubjects, searchByEDPCodes, searchBySubject, totalUnitsSelected, has_nstp, has_pe, assignedSection, disableAcceptBtn, disableSubmitBtn, yearLevel,
-            filterBySection, filterByCourse, selectionType, adjustOrigSubjects
+            filterBySection, filterByCourse, selectionType, adjustOrigSubjects,viewSuggestion
         } = this.state;
         let loadNotification = "";
         let loadSearchSubject = "";
@@ -609,6 +616,15 @@ class SubjectSelection extends Component {
         }
         return(
             <Fragment>
+                <div className={"modal " + (viewSuggestion == true?  "is-active " : "")}>
+                    <div className="modal-background" onClick={this.handleOnClickSuggestion}></div>
+                    <div className="modal-card">
+                        <section className="modal-card-body">
+                           <Suggestion />
+                        </section>
+                    </div>
+                    <button className="modal-close is-large" aria-label="close" onClick={this.closeModal}></button>
+                </div>
                 <h4 className="is-size-4 has-text-weight-bold mb-2">Subject Selection</h4>   
                 <div className="buttons">
                     <button className="button is-small is-link" onClick={this.handleOnClickBack}>
@@ -616,7 +632,13 @@ class SubjectSelection extends Component {
                         <i className="fas fa-angle-left"></i>
                         </span>
                         <span>Back to Enrollment Steps</span>
-                    </button>            
+                    </button>     
+                    <button className="button is-small is-info" onClick={this.handleOnClickSuggestion}>
+                        <span className="icon is-small">
+                        <i className="fas fa-angle-left"></i>
+                        </span>
+                        <span>Suggestions</span>
+                    </button>          
                 </div>
                 {selectionType === "enrollment" ? loadNotification : ""}
                 <div className="columns">

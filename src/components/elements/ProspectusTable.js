@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import {hasSubjectLab, getGrade,getLoggedUserDetails } from '../../helpers/helper';
+import {hasSubjectLab, getGrade,getLoggedUserDetails, isNumeric} from '../../helpers/helper';
 export default class ProspectusTable extends Component {
 
     
@@ -19,7 +19,7 @@ export default class ProspectusTable extends Component {
     }
     viewButtonVisibity = (grade) => {
         var visible = false;
-        if((grade > 3.0 || grade === 0 ) && grade != null && this.props.selectedTab <= getLoggedUserDetails("yearlevel")){
+        if((grade > 30 || grade === 0 ) && grade != null && this.props.selectedTab <= getLoggedUserDetails("yearlevel")){
             visible = true;
         }
         return visible;
@@ -64,21 +64,25 @@ export default class ProspectusTable extends Component {
                 let labUnit = hasSubjectLab(subjects, sub.internal_code);
                totalUnits = labUnit + parseInt(sub.units)+ totalUnits;
                var getGrades = getGrade(grades, sub.internal_code);
-               var getPrerequisites = requisites ? requisites.filter(remark => remark.internal_code === sub.internal_code).map((rem, i) => {
+               var getCorequisites = requisites ? requisites.filter(remark => remark.internal_code === sub.internal_code && remark.requisite_type == "C").map((rem, i) => {
+                    return rem.subject_code;
+                }) :"";
+               var getPrerequisites = requisites ? requisites.filter(remark => remark.internal_code === sub.internal_code && remark.requisite_type == "P").map((rem, i) => {
                     return ( 
                         <span key={i} className={"ml-1 tag"+ (getGrade(grades,rem.requisites) <= 30 && getGrade(grades,rem.requisites) != 0? " is-success":" is-danger")}>{rem.subject_code}</span>
                     )
                }) :"";
+               let grade = isNumeric(getGrades) && getGrades.length === 2 ? getGrades.charAt(0) + "." +  getGrades.charAt(1) : getGrades;
                return(
                 <Fragment key={index}>
-                    <tr className = {getGrades > 3? "has-background-danger-light": ""}>
+                    <tr className = {(getGrades > 30 && getLoggedUserDetails("yearlevel")>selectedTab) || (getGrades === 0 && getLoggedUserDetails("yearlevel")>selectedTab)? "has-background-danger-light": ""}>
                         <td>{sub.subject_name}</td>
                         <td>{sub.descr_1}</td>
                         <td className="has-text-centered">{sub.units}</td>
                         <td className="has-text-centered">{labUnit}</td>
                         <td className="has-text-centered">{parseInt(sub.units)+ labUnit}</td>
-                        <td>{getPrerequisites}</td>
-                        <td className={"has-text-centered has-text-weight-bold "+ (getGrades > 30 ? "has-text-danger":"has-text-info")} >{getGrades !== 0 && getGrades}</td>
+                        <td>{getCorequisites.length > 0 ? "Taken together with "+getCorequisites:getPrerequisites}</td>
+                        <td className={"has-text-centered has-text-weight-bold "+ (getGrades > 30 ? "has-text-danger":"has-text-info")} >{getGrades !== 0 && grade}</td>
                         <td>{  this.viewButtonVisibity(getGrades) && this.checkPrerequisiteStatus(sub.internal_code)? <button className="button is-info is-small" onClick={() => this.viewScheduleButtonHandle(sub.subject_name, sub.internal_code, sub.descr_1)}>View Schedules</button>  : "" }</td>
                     </tr> 
                 </Fragment>
@@ -102,7 +106,7 @@ export default class ProspectusTable extends Component {
                                             <th className="has-text-centered">Lec</th>
                                             <th className="has-text-centered">Lab</th>
                                             <th className="has-text-centered">Total Units</th>
-                                            <th className="has-text-left">Pre-requisites</th>
+                                            <th className="has-text-left">Pre/Co-requisites</th>
                                             <th className="has-text-centered">Grade</th>
                                             <th className="has-text-centered">Actions</th>
                                         </tr>
@@ -141,7 +145,7 @@ export default class ProspectusTable extends Component {
                                             <th className="has-text-centered">Lec</th>
                                             <th className="has-text-centered">Lab</th>
                                             <th className="has-text-centered">Total Units</th>
-                                            <th className="has-text-left">Pre-requisites</th>
+                                            <th className="has-text-left">Pre/Co-requisites</th>
                                             <th className="has-text-centered">Grade</th>
                                             <th className="has-text-centered">Actions</th>
                                         </tr>

@@ -367,6 +367,16 @@ class DeanEvaluation extends Component {
         const editables = { allowed_units, year_level, classification, stud_id, section, session };
         const searcheables = { name, course, date, id_number, filterYearLevel };
         const approver = getLoggedUserDetails("usertype");
+        const loadDocuments = studentInfo && studentInfo.attachments.length > 0 ? studentInfo.attachments
+        .filter(document => document.type == "Transcript of Records")
+        .map((document, index) => {
+            return (
+                <tr key={index}>                                                        
+                    <th className="is-narrow">Document: </th>   
+                    <td><a href={process.env.REACT_APP_PATH_STORAGE_ATTACHMENTS + document.filename} target="_blank">{document.type}</a></td>                                                     
+                </tr>
+            );
+        }) : "";
         let loadStudentInfo = "";
         if(["OLD STUDENT", "RETURNEE", "SHIFTEE"].includes(selectedStudentClassification)) {
             loadStudentInfo = ( 
@@ -450,10 +460,10 @@ class DeanEvaluation extends Component {
                                 <td className="has-text-centered">{labUnit + parseInt(sub.units)}</td>
                                 <td className="has-text-centered">{(countCore>0)?"Taken together with "+getCorequisites:getPrerequisites}</td>
                                 <td className="has-text-centered"> 
-                                    {
+                                    {/* {
                                         (this.state.editableGrade.editable == true && this.state.editableGrade.internal_code == sub.internal_code)&&
                                         <input className="input is-small"/>
-                                    }
+                                    } */}
                                 </td>
                                 <th classNmae="has-text-centered">
                                     <p className="buttons">
@@ -689,10 +699,20 @@ class DeanEvaluation extends Component {
                                         />
                                     }
                                     {(this.state.selectedCurrYear !== null && this.state.selectedCurrYear !== "" && this.state.studentGrades == null) &&
-                                        <GradesTable 
-                                            studentGrades={studentGrades} 
-                                            college={studentInfo.college}
-                                        />
+                                        <article className="message m-0 pt-0 is-link">
+                                            <div className="message-header">
+                                                <p>Documents Attached</p>                   
+                                            </div>
+                                            <div className="message-body p-0">
+                                                <div className="table-container">
+                                                    <table className="table is-striped is-fullwidth is-narrow is-bordered is-hoverable">                                        
+                                                        <tbody>
+                                                            {loadDocuments}                                                   
+                                                        </tbody>
+                                                    </table>    
+                                                </div>                                
+                                            </div>
+                                        </article>
                                     }
                                 </div>
                             </div>

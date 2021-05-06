@@ -16,6 +16,7 @@ export default class RequestedSujects extends Component {
                         <td className="has-text-centered">{request.rtype}</td>
                         <td className="has-text-centered">{request.days}</td>
                         <td className="has-text-centered">{request.time_start} - {request.time_end} {request.mdn}</td>
+                        <td className="has-text-centered">{request.size}</td>
                         <th className="has-text-centered has-text-info">{request.status}</th>
                         <td className="has-text-centered">
                             <button className="button is-small is-danger" onClick={() => handleCancelSubjectButton(request.internal_code)}>Cancel</button>
@@ -45,13 +46,14 @@ export default class RequestedSujects extends Component {
                                 <th className="has-text-centered">Type</th>
                                 <th className="has-text-centered">Days</th>
                                 <th className="has-text-centered">Time</th>
+                                <th className="has-text-centered">Size</th>
                                 <th className="has-text-centered">Status</th>
                                 <th className="has-text-centered">Actions</th>
                             </tr>
                         </thead>
                         <tfoot>
                             <tr>  
-                                <td colSpan="7"><button className="button is-small is-info is-pulled-right" onClick={handleRequestButton}>{showRequestForm? 'Hide Request Form' :'Request Subject'}</button></td>
+                                <td colSpan="8"><button className="button is-small is-info is-pulled-right" onClick={handleRequestButton}>{showRequestForm? 'Hide Request Form' :'Request Subject'}</button></td>
                                 
                             </tr>
                         </tfoot>

@@ -10,15 +10,16 @@ export function userModulesPermission(userType) {
                     { name: "Assessment", icon: "fas fa-cash-register", route: "/assessment", slug: "assessment" },  
                     { name: "Study Load", icon: "fas fa-book-reader", route: "/studentstudyload", slug: "studyload" },  
                     { name: "E Grade", icon: "fas fa-table", route: "/egrade", slug: "egrade" },
-                    { 
+                    { name: "E Prospectus", icon: "fas fa-file", route: "/prospectus", slug: "eprospectus" },
+                    /* { 
                         name: "Curriculum", icon: "fas fa-file", route: "", slug: "curriculum", 
                         submodules: [
                             {name: "Prospectus", icon: "fas fa-minus", route: "/prospectus", slug: "curriculum.prospectus" },
-                            /* {name: "Behind", icon: "fas fa-minus", route: "/behind", slug: "curriculum.behind" },
-                            {name: "Suggestion", icon: "fas fa-minus", route: "/suggestion", slug: "curriculum.suggestion" }, */
+                            {name: "Behind", icon: "fas fa-minus", route: "/behind", slug: "curriculum.behind" },
+                            {name: "Suggestion", icon: "fas fa-minus", route: "/suggestion", slug: "curriculum.suggestion" },
                             
                         ], 
-                    }, 
+                    },  */
                     { name: "Profile", icon: "fas fa-user", route: "/profile", slug: "profile" }                    
                 ],
                 permissions: [
@@ -52,6 +53,7 @@ export function userModulesPermission(userType) {
                         name: "Schedules", icon: "far fa-calendar-alt", route: "", slug: "schedules",
                         submodules: [
                             {name: "Department", icon: "fas fa-minus", route: "/schedules/department", slug: "schedules.department" },
+                            {name: "Requested Subjects", icon: "fas fa-minus", route: "/schedules/request", slug: "schedules.request" },
                             {name: "View All", icon: "fas fa-minus", route: "/schedules/viewall", slug: "schedules.viewall" }
                         ], 
                     },
@@ -102,6 +104,7 @@ export function userModulesPermission(userType) {
                     name: "Schedules", icon: "far fa-calendar-alt", route: "", slug: "schedules",
                     submodules: [
                         {name: "Department", icon: "fas fa-minus", route: "/schedules/department", slug: "department" },
+                        {name: "Requested Subjects", icon: "fas fa-minus", route: "/schedules/request", slug: "schedules.request" },
                         {name: "View All", icon: "fas fa-minus", route: "/schedules/viewall", slug: "viewall" }
                     ], 
                 },
@@ -382,6 +385,12 @@ export function userModulesPermission(userType) {
                             {name: "Tracker", icon: "fas fa-minus", route: "/enrollment/edp/tracker", slug: "enrollment.tracker" },
                         ],
                     },    
+                    { 
+                        name: "Schedules", icon: "far fa-calendar-alt", route: "", slug: "schedules",
+                        submodules: [
+                            {name: "Requested Subjects", icon: "fas fa-minus", route: "/schedules/request", slug: "schedules.request" }
+                        ], 
+                    },
                     { name: "Study Load", icon: "fas fa-book-reader", route: "/staffstudyload", slug: "studyload" },  
                     { name: "E Grade", icon: "fas fa-table", route: "/egrade", slug: "egrade" }, 
                     { name: "Class List", icon: "fas fa-clipboard-list", route: "/classlist", slug: "classlist" }, 

@@ -8,11 +8,16 @@ import RequestedSubjects from '../../components/elements/RequestedSubjects';
 
 export class RequestSubjects extends Component {
     state = {
-        showRequestForm:false, subject_name: null, days: null, time_start: null, time_end:null,requestedSubjects: null,
+        showRequestForm:false, subject_name: null, days: null, time_start: null, time_end:null,requestedSubjects: null,filteredSubjects: null,
          requestSubjects: null,rtype: 0, subjects: null, internal_code: null, success: null, closeButton:null, sanitizedSubject: {test: null}
     }
     componentDidMount = () => {
-         getStudentRequest(getLoggedUserDetails("coursecode"))
+        var data = {
+            department: getLoggedUserDetails("deptabbr"),
+            course_code: getLoggedUserDetails("coursecode"),
+            term : process.env.REACT_APP_CURRENT_SCHOOL_TERM
+        }
+         getStudentRequest(data)
          .then(response => {  
             if(response.data) {          
                 this.setState({
@@ -35,12 +40,16 @@ export class RequestSubjects extends Component {
                 }
             }); 
         }
-        
-        getStudentRequestSubject(getLoggedUserDetails("idnumber"))
+        var requestData = {
+            id_number : getLoggedUserDetails("idnumber"),
+            term : process.env.REACT_APP_CURRENT_SCHOOL_TERM
+        }
+        getStudentRequestSubject(requestData)
         .then(response => {
             if(response.data) {          
                 this.setState({
-                    requestedSubjects:  response.data.request
+                    requestedSubjects:  response.data.request,
+                    filteredSubjects: response.data.filtered
                 });
                 //this.sanitizedSubjectList();
             }
@@ -72,7 +81,8 @@ export class RequestSubjects extends Component {
         
         const data = {
             id_number: getLoggedUserDetails("idnumber"),
-            internal_code: e
+            internal_code: e,
+            term: process.env.REACT_APP_CURRENT_SCHOOL_TERM
         };
         console.log("handleAddSubject",data);
         addStudentRequest(data)
@@ -85,7 +95,8 @@ export class RequestSubjects extends Component {
     handleCancelSubjectButton = (e) =>{
         const data = {
             id_number: getLoggedUserDetails("idnumber"),
-            internal_code: e
+            internal_code: e,
+            term: process.env.REACT_APP_CURRENT_SCHOOL_TERM
         };
         cancelStudentRequest(data)
         .then(response => {
@@ -136,7 +147,8 @@ export class RequestSubjects extends Component {
                     mdn: mDn,
                     days: days,
                     rtype: rtype,
-                    id_number: getLoggedUserDetails("idnumber")
+                    id_number: getLoggedUserDetails("idnumber"),
+                    term: process.env.REACT_APP_CURRENT_SCHOOL_TERM
                 }
                 //console.log("intenral_code",data);
                 saveSubjectRequest(data)
@@ -156,18 +168,27 @@ export class RequestSubjects extends Component {
         }
     }
     handleLoadSubjectRequest =()=>{
-        getStudentRequest(getLoggedUserDetails("coursecode"))
+        var studentData = {
+            department: getLoggedUserDetails("deptabbr"),
+            course_code: getLoggedUserDetails("coursecode"),
+            term: process.env.REACT_APP_CURRENT_SCHOOL_TERM
+        }
+        getStudentRequest(studentData)
         .then(response => {  
             if(response.data) {          
                 this.setState({
                     requestSubjects: response.data.request
                 });
-
-                getStudentRequestSubject(getLoggedUserDetails("idnumber"))
+                var data = {
+                    id_number: getLoggedUserDetails("idnumber"),
+                    term: process.env.REACT_APP_CURRENT_SCHOOL_TERM
+                }
+                getStudentRequestSubject(data)
                 .then(response => {
                     if(response.data) {          
                         this.setState({
-                            requestedSubjects: response.data.request
+                            requestedSubjects: response.data.request,
+                            filteredSubjects: response.data.filtered
                         });
                         //const{requestedSubjects} = this.state;
                     }
@@ -195,10 +216,10 @@ export class RequestSubjects extends Component {
       }
     render() {
         const{showRequestForm, requestSubjects, subject_name,days,
-        time_end,time_start,rtype,subjects,success, internal_code,requestedSubjects} = this.state;
+        time_end,time_start,rtype,subjects,success, internal_code,requestedSubjects,filteredSubjects} = this.state;
         const values = {subject_name, days, time_end, time_start,rtype,internal_code};
         var count = 0;
-        var sanitizedSubjectList = subjects ? subjects.map((subject, index) => {
+        var sanitizedSubjectList = filteredSubjects ? filteredSubjects.map((subject, index) => {
             return {  value: subject.internal_code, label: subject.subject_name}
         }):[];
 
@@ -229,6 +250,7 @@ export class RequestSubjects extends Component {
                         success = {success}
                         handleOnChangeSelect = {this.handleOnChangeSelect}
                         handleCloseButton = {this.handleCloseButton}
+                        internal_code = {internal_code}
                     /> : ""
                 }
             </Fragment>

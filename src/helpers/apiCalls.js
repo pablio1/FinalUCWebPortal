@@ -1247,12 +1247,12 @@ export function getCurriculum(data) {
             });
 }
 
-export function getStudentRequest(course_code){
+export function getStudentRequest(data){
     const headers = { 
         'Access-Control-Allow-Origin': '*',
         'Authorization': 'Bearer ' + store.get("token")
     };
-    return axios.post(process.env.REACT_APP_API_GET_REQUEST_SUBJECT, { course_code: course_code }, {headers})
+    return axios.post(process.env.REACT_APP_API_GET_REQUEST_SUBJECT,data , {headers})
     .catch(error => {
         console.log(error);
     });
@@ -1272,7 +1272,7 @@ export function getStudentRequestSubject(data){
         'Access-Control-Allow-Origin': '*',
         'Authorization': 'Bearer ' + store.get("token")
     };
-    return axios.post(process.env.REACT_APP_API_GET_STUDENT_REQUEST, {id_number: data}, {headers})
+    return axios.post(process.env.REACT_APP_API_GET_STUDENT_REQUEST, data, {headers})
     .catch(error => {
         console.log(error);
     });
@@ -1418,6 +1418,28 @@ export function getSubjectEquivalence(data){
         'Authorization': 'Bearer ' + store.get("token")
     };
     return axios.post(process.env.REACT_APP_API_GET_SUBJECT_EQUIVALENCE, data, {headers})
+    .catch(error => {
+        console.log(error);
+    });
+}
+
+export function getAllStudentsRequest(data){
+    const headers = { 
+        'Access-Control-Allow-Origin': '*',
+        'Authorization': 'Bearer ' + store.get("token")
+    };
+    return axios.post(process.env.REACT_APP_API_GET_ALL_STUDENT_REQUEST, data, {headers})
+    .catch(error => {
+        console.log(error);
+    });
+}
+
+export function updateRequestStatus(data){
+    const headers = { 
+        'Access-Control-Allow-Origin': '*',
+        'Authorization': 'Bearer ' + store.get("token")
+    };
+    return axios.post(process.env.REACT_APP_API_UPDATE_REQUEST_STATUS, data, {headers})
     .catch(error => {
         console.log(error);
     });

@@ -142,7 +142,6 @@ export default class componentName extends Component {
                                                 <th className="has-text-ceFntered">Lab</th>
                                                 <th className="has-text-centered">Total Units</th>
                                                 <th className="has-text-centered">Pre-requisites</th>
-                                                <th className="has-text-centered">{selectedSubject ? "Add To": "Action"}</th>
                                             </tr>
                                         </thead>
                                         <tfoot>
@@ -151,7 +150,6 @@ export default class componentName extends Component {
                                                 <td></td>
                                                 <td colSpan="2" className="has-text-right has-text-weight-bold"> Total</td>
                                                 <td className="has-text-centered has-text-weight-bold ">{totalUnits}</td>                                  
-                                                <td></td>
                                                 <td></td>
                                             </tr>
                                         </tfoot>
@@ -179,7 +177,6 @@ export default class componentName extends Component {
                                                 <th className="has-text-ceFntered">Lab</th>
                                                 <th className="has-text-centered">Total Units</th>
                                                 <th className="has-text-centered">Pre-requisites</th>
-                                                <th className="has-text-centered">{selectedSubject ? "Add To": "Action"}</th>
                                             </tr>
                                         </thead>
                                         <tfoot>
@@ -188,7 +185,6 @@ export default class componentName extends Component {
                                                 <td></td>
                                                 <td colSpan="2" className="has-text-right has-text-weight-bold"> Total</td>
                                                 <td className="has-text-centered has-text-weight-bold ">{totalUnits}</td>                                  
-                                                <td></td>
                                                 <td></td>
                                             </tr>
                                         </tfoot>
@@ -238,7 +234,7 @@ export default class componentName extends Component {
                     <td>{course.course_description}</td>
                     <td>{course.course_department}</td>
                     <td>{course.course_department_abbr}</td>
-                    <td><button className="is-small button is-info" onClick={() => this.handleGetSubjectInfo(course.course_code, course.course_description, course.course_abbr)}>View Subjects</button></td>
+                    <td><button className="is-small button is-info" onClick={() => this.handleGetSubjectInfo(course.course_code, course.course_description, course.course_abbr)}>View</button></td>
                 </tr>
             </Fragment>
         )

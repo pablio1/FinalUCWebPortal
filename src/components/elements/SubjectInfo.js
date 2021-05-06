@@ -443,7 +443,7 @@ export default class SubjectInfo extends Component {
                                             )
                                         )
                                     ):(
-                                        <button className="button is-small is-info" onClick={() => this.handleSelectButton(sub.internal_code)}>Select</button>
+                                        <button className="button is-small is-info" onClick={() => this.handleSelectButton(sub.internal_code)}>Modify</button>
                                     )
                                 )}
                             </td>
