@@ -4,8 +4,21 @@ export default class ProspectusTable extends Component {
 
     
     state = {
-        selectedSubject: null, internal_code: null, subjectDescription: null,
+        selectedSubject: null, internal_code: null, subjectDescription: null,year:null, semester: null,
         grade: 2.9
+    }
+    componentDidMount = () => {
+
+        const {subjects} = this.props;
+        const year = [...new Set(subjects.map(item => item.year_level))]
+        this.setState({
+            year: year
+        });
+        const semester = [...new Set(subjects.map(item => item.semester))]
+        this.setState({
+            semester: semester
+        });
+        
     }
     viewScheduleButtonHandle = (selected, internal, description) =>{
         const{selectedSubject,internal_code,subjectescription} = this.state;
@@ -50,9 +63,10 @@ export default class ProspectusTable extends Component {
         return status;
     }
   render() {
-      const{grade} = this.state
-      const {subjects,selectedTab, requisites, grades,semesters} = this.props;
-      
+      const{grade,year,semester} = this.state
+      const {subjects,selectedTab, requisites, grades,semesters,printAbleID} = this.props;
+      const yearLevel = ['', 'First', 'Second', 'Third', 'Fourth', 'Fifth'];
+        //const sem  = ['', 'First', 'Second', 'Summer'];
       var countRemark = 0;
       const semArray  = ['', 'First', 'Second','Summer'];
       var loadSemesters = semesters ? semesters.map((sem, first)=>{
@@ -89,6 +103,7 @@ export default class ProspectusTable extends Component {
 
             )
         }):"";
+        
         return(
             <Fragment key={first}>
                 {(countSummer != 0 && sem == 3) &&
@@ -172,10 +187,146 @@ export default class ProspectusTable extends Component {
             </Fragment>
         )
       }):"";
+      var loadHeader = year? year.map((year, index)=>{
+            var loadSemester = semester ? semester.map((semester, index)=>{
+                var totalUnits = 0;
+                var countSummer = 0;
+                var countRegular = 0;
+                var loadSubjects = subjects? subjects.filter(fil => fil.year_level == year && fil.semester == semester && fil.subject_type != 'L').map((sub, i)=>{
+                    let labUnit = hasSubjectLab(subjects, sub.internal_code);
+                    totalUnits = labUnit + parseInt(sub.units)+ totalUnits;
+                    var countPrerequisite = 0;
+                    var countCorequisite = 0;
+                    var countCore = 0;
+                    var temp = null;
+                    var loadSummerSubjects = subjects.filter(f => f.semester != 3 && f.year_level == year).map((summer, i)=>{
+                        countRegular++;
+                    });
+                    var loadSummerSubjects = subjects.filter(f => f.semester == 3 && f.year_level == year).map((summer, i)=>{
+                        countSummer++;
+                    });
+                    
+                    var getCorequisites = requisites ? requisites.filter(remark => remark.internal_code === sub.internal_code && remark.requisite_type == "C").map((rem, i) => {
+                        countCore++;
+                        return rem.subject_code;
+                   }) :"";
+                    var getPrerequisites = requisites ? requisites.filter(remark => remark.internal_code === sub.internal_code && remark.requisite_type == "P").map((rem, i) => {
+                        return ( 
+                            <span key={i} className="ml-1 tag">{rem.subject_code}</span>
+                        )
+                   }) :"";
+                    return (
+                        <Fragment>
+                            <tr key={i}>
+                                <td>{sub.subject_name}</td>
+                                <td>{sub.descr_1}</td>
+                                <td></td>
+                                <td></td>
+                                <td className="has-text-centered">{labUnit + parseInt(sub.units)}</td>
+                                <td className="has-text-centered">{(countCore>0)?"Taken together with "+getCorequisites:getPrerequisites}</td>
+                                <td className="has-text-centered"> 
+                                    {/* {
+                                        (this.state.editableGrade.editable == true && this.state.editableGrade.internal_code == sub.internal_code)&&
+                                        <input className="input is-small"/>
+                                    } */}
+                                </td>
+                                
+                            </tr>
+                        </Fragment>
+                    )
+                }):"";
+    
+                
+                /* var loadSummerSubjects = subjects.filter(f => f.semester == 3 && f.year == year ).map((summer, in)=>{}):""; */
+                return (
+                    
+                    <Fragment>
+                        {   (semester == 3 && countSummer != 0) &&
+                            <div>
+                                <div className="message-header">
+                                    <p className="has-text-weight-bold">{semArray[semester]} {semester != 3?"Semester":""}</p>    
+                                </div>
+                                <div className="message-body p-0">
+                                    <div className="table-container">
+                                        <table className="table is-striped is-fullwidth is-hoverable">
+                                            <thead>
+                                                <tr>
+                                                    <th className="is-narrow">Subject Code</th>
+                                                    <th>Descriptive Title</th>
+                                                    <th className="has-text-centered">Lec</th>
+                                                    <th className="has-text-centered">Lab</th>
+                                                    <th className="has-text-centered">Total Units</th>
+                                                    <th className="has-text-centered">Pre-requisites</th>
+                                                    <th className="is-narrow">Grade</th>
+                                                </tr>
+                                            </thead>
+                                            <tfoot>
+                                                <tr>
+                                                    <td colSpan="4" className="has-text-right has-text-weight-bold"> Total</td>
+                                                    <td className="has-text-centered has-text-weight-bold ">{totalUnits}</td>                                  
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+                                            </tfoot>
+                                            <tbody>   
+                                                {loadSubjects}                                                                                            
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        {   (semester != 3) &&
+                            <div>
+                                <div className="message-header">
+                                    <p className="has-text-weight-bold">{semArray[semester]} {semester != 3?"Semester":""}</p>    
+                                </div>
+                                <div className="message-body p-0">
+                                    <div className="table-container">
+                                        <table className="table is-striped is-fullwidth is-hoverable">
+                                            <thead>
+                                                <tr>
+                                                    <th className="is-narrow">Subject Code</th>
+                                                    <th>Descriptive Title</th>
+                                                    <th className="has-text-centered">Lec</th>
+                                                    <th className="has-text-centered">Lab</th>
+                                                    <th className="has-text-centered">Total Units</th>
+                                                    <th className="has-text-centered">Pre-requisites</th>
+                                                    <th className="is-narrow">Grade</th>
+                                                </tr>
+                                            </thead>
+                                            <tfoot>
+                                                <tr>
+                                                    <td colSpan="4" className="has-text-right has-text-weight-bold"> Total</td>
+                                                    <td className="has-text-centered has-text-weight-bold ">{totalUnits}</td>                                  
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+                                            </tfoot>
+                                            <tbody>   
+                                                {loadSubjects}                                                                                            
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </Fragment>
+                )
+            }):"";
+            return(
+                <Fragment>
+                    <h1 className="is-size-4">{yearLevel[year]} Year</h1>
+                    <article className="message mb-0 pb-0 is-small">
+                        {loadSemester}
+                    </article>
+                </Fragment>
+            )
+        }):""; 
     return (
         <Fragment>
-            <article className="message mb-0 pb-0 is-small">
-                {loadSemesters}
+            <article className="message mb-0 pb-0 is-small" id={printAbleID}>
+                {selectedTab != "all"? loadSemesters: loadHeader}
             </article>
         </Fragment>
     );

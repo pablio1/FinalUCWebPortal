@@ -10,8 +10,8 @@ import StudentInformation from '../enrollment/StudentInformation';
 import StudentInfoWithGrades from '../enrollment/StudentInfoWithGrades';
 import GradesTable from '../../components/elements/GradesTable';
 import SpinnerGif from '../../assets/sysimg/spinner.gif'
-import { getLoggedUserDetails,hasSubjectLab } from '../../helpers/helper';
-import { updateStudentStatus,getCurriculum, getAllCurriculum, getStudentList, getOpenSections, getOldStudentInfo, getStudentInfo, getStatusCount, getGradesEvaluation, getCourses } from '../../helpers/apiCalls';
+import { getLoggedUserDetails,hasSubjectLab,getGrade,isNumeric } from '../../helpers/helper';
+import { updateStudentStatus,getCurriculum,setStudentGrades,setEvaluationStatus,getAllCurriculum, getStudentList, getOpenSections, getOldStudentInfo, getStudentInfo, getStatusCount, getGradesEvaluation, getCourses } from '../../helpers/apiCalls';
 
 class DeanEvaluation extends Component {
     static propTypes = {
@@ -26,7 +26,8 @@ class DeanEvaluation extends Component {
             allowed_units: 0, year_level: '', classification: '', totalRecords: 0, section: '', stud_id: '',
             disapproveMsg: '', courses: null,  filterYearLevel: 0,requesites: null,grades:null,
             selectedStudentID: '', selectedStudentCourseCode: '', selectedStudentClassification: '', selectedTab: 'evaluate',
-            showPreloader: false, isLoadingStudentList: false, curr_year: null, selectedCurrYear: null, isEvaluate:false, year:null, semester: null,subjects: null, editableGrade: [{internal_code: null, editable: false}]
+            showPreloader: false, isLoadingStudentList: false, curr_year: null, selectedCurrYear: null, isEvaluate:false, year:null, semester: null,subjects: null, editableGrade: [{internal_code: null, editable: false}],
+            setGrade: null
         };
     }
     componentDidMount = () => {
@@ -63,7 +64,8 @@ class DeanEvaluation extends Component {
             editableGrade: {
                 internal_code: internal_code,
                 editable: true
-            }
+            },
+            setGrade: null
         });
 
         console.log("edit", this.state.editableGrade);
@@ -75,6 +77,35 @@ class DeanEvaluation extends Component {
             selectedTab: tab
         }, () =>  this.getFilteredStudentList() );              
     }
+    handleLoadCurriculum = () => {
+        const {selectedStudentID, selectedCurrYear} = this.state;
+        var data = {
+            id_number: selectedStudentID,
+            year: selectedCurrYear
+        }
+        console.log("test",data);
+        getCurriculum(data)
+            .then(response => {  
+                if(response.data) {          
+                    this.setState({
+                        subjects: response.data.subjects,
+                        requisites: response.data.requisites,
+                        grades: response.data.grades
+                    });
+                    console.log("response",response.data);
+                    const {subjects} = this.state;
+                    const year = [...new Set(subjects.map(item => item.year_level))]
+                    this.setState({
+                        year: year
+                    });
+                    const semester = [...new Set(subjects.map(item => item.semester))]
+                    this.setState({
+                        semester: semester
+                    });
+                    //console.log("subjects",this.state.subjects);
+                }
+            }); 
+    }
     handleOnClickEvaluate = () =>{
         const {isEvaluate,selectedStudentID,selectedCurrYear} = this.state;
 
@@ -85,32 +116,7 @@ class DeanEvaluation extends Component {
             this.setState({
                 isEvaluate: !isEvaluate
             });
-            var data = {
-                id_number: selectedStudentID,
-                year: selectedCurrYear
-            }
-            console.log("test",data);
-            getCurriculum(data)
-                .then(response => {  
-                    if(response.data) {          
-                        this.setState({
-                            subjects: response.data.subjects,
-                            requisites: response.data.requisites,
-                            grades: response.data.grades
-                        });
-                        console.log("response",response.data);
-                        const {subjects} = this.state;
-                        const year = [...new Set(subjects.map(item => item.year_level))]
-                        this.setState({
-                            year: year
-                        });
-                        const semester = [...new Set(subjects.map(item => item.semester))]
-                        this.setState({
-                            semester: semester
-                        });
-                        //console.log("subjects",this.state.subjects);
-                    }
-                }); 
+            this.handleLoadCurriculum();
         } 
     }
     handleOnchangeInput = (key, value) => {
@@ -354,13 +360,58 @@ class DeanEvaluation extends Component {
             });
         }
     }
+    handleOnClickSaveGrade = (internal_code) => {
 
+        var data = {
+            internal_code: internal_code,
+            id_number: this.state.selectedStudentID,
+            grade: this.state.setGrade,
+            term: process.env.REACT_APP_CURRENT_SCHOOL_TERM
+        }
+        console.log("data", data);
+        setStudentGrades(data)
+        .then(response => {
+            if(response.data){
+                console.log("success",response.data);
+                this.handleLoadCurriculum();
+            }
+        });
+
+        this.setState({
+            editableGrade: {
+                internal_code: internal_code,
+                editable: false,
+            },
+            setGrade: null
+        });
+        
+        console.log("edit", this.state.editableGrade);
+    }
+    inputChange = e => {
+        this.setState({
+            setGrade: e.target.value
+        });
+        console.log("setGrade", this.state.setGrade);
+    }
+    handleSubmitEvaluation = () => {
+        var data ={
+            id_number: this.state.selectedStudentID,
+            term: process.env.REACT_APP_CURRENT_SCHOOL_TERM
+        }
+        setEvaluationStatus(data)
+        .then(response => {
+            if(response.data){
+                console.log("status",response.data);
+                this.getFilteredStudentList();
+            }
+        })
+    }
     render() {
         const { 
             studentList, page, limit, name, course, date, id_number, studentGrades, stud_id, disapproveMsg, sections, section,year,semester,
             totalPending, totalApproved, totalDisapproved, course_department, session, courses, filterYearLevel, showPreloader, isLoadingStudentList,
             studentInfo, allowed_units, year_level, classification, totalRecords, selectedStudentID, selectedStudentClassification, selectedTab,curr_year,selectedCurrYear,
-            subjects,requisites, editableGrade,isEvaluate
+            subjects,requisites, editableGrade,isEvaluate,grades
         } = this.state;
         const yearLevel = ['', 'First', 'Second', 'Third', 'Fourth', 'Fifth'];
         const sem  = ['', 'First', 'Second', 'Summer'];
@@ -415,6 +466,7 @@ class DeanEvaluation extends Component {
                 studentInfo = {studentInfo}
                 curr_year = {curr_year}
                 step="DeanEvaluation"
+                handleSubmitEvaluation = {this.handleSubmitEvaluation}
                 handleApprovalButton={this.handleApprovalButton}
                 handleOnchangeInput={this.handleOnchangeInput}
                 disapproveMsg={disapproveMsg}
@@ -422,7 +474,7 @@ class DeanEvaluation extends Component {
                 handleOnClickEvaluate={this.handleOnClickEvaluate}
             />
         );
-
+        
         
         var loadHeader = year? year.map((year, index)=>{
             var loadSemester = semester ? semester.map((semester, index)=>{
@@ -436,6 +488,8 @@ class DeanEvaluation extends Component {
                     var countCorequisite = 0;
                     var countCore = 0;
                     var temp = null;
+                    var getGrades = getGrade(grades, sub.internal_code);
+                    let grade = isNumeric(getGrades) && getGrades.length === 2 ? getGrades.charAt(0) + "." +  getGrades.charAt(1) : null;
                     var loadSummerSubjects = subjects.filter(f => f.semester != 3 && f.year_level == year).map((summer, i)=>{
                         countRegular++;
                     });
@@ -452,6 +506,21 @@ class DeanEvaluation extends Component {
                             <span key={i} className="ml-1 tag">{rem.subject_code}</span>
                         )
                    }) :"";
+
+                   var editButton = (
+                        <button class="button is-small" onClick={()=>this.handleOnClickEdit(sub.internal_code)}>
+                            <span class="icon is-small">
+                            <i class="fas fa-edit"></i>
+                            </span>
+                        </button>
+                   );
+                   var saveButton = (
+                        <button class="button is-small" onClick={()=>this.handleOnClickSaveGrade(sub.internal_code)}>
+                            <span class="icon is-small">
+                            <i class="fas fa-save"></i>
+                            </span>
+                        </button>
+                   )
                     return (
                         <Fragment>
                             <tr key={i}>
@@ -460,23 +529,18 @@ class DeanEvaluation extends Component {
                                 <td className="has-text-centered">{labUnit + parseInt(sub.units)}</td>
                                 <td className="has-text-centered">{(countCore>0)?"Taken together with "+getCorequisites:getPrerequisites}</td>
                                 <td className="has-text-centered"> 
-                                    {/* {
-                                        (this.state.editableGrade.editable == true && this.state.editableGrade.internal_code == sub.internal_code)&&
-                                        <input className="input is-small"/>
-                                    } */}
+                                    {
+                                        (this.state.editableGrade.editable == true && this.state.editableGrade.internal_code == sub.internal_code && grade == null)?
+                                        <input className="input is-small" onChange={this.inputChange} value={this.state.setGrade}/>: grade
+                                    }
+
                                 </td>
-                                <th classNmae="has-text-centered">
+                                <th className="has-text-centered">
                                     <p className="buttons">
-                                        <button class="button is-small" onClick={()=>this.handleOnClickEdit(sub.internal_code)}>
-                                            <span class="icon is-small">
-                                            <i class="fas fa-edit"></i>
-                                            </span>
-                                        </button>
-                                        <button class="button is-small">
-                                            <span class="icon is-small">
-                                            <i class="fas fa-search"></i>
-                                            </span>
-                                        </button>
+                                        {/* {(this.state.editableGrade.internal_code == sub.internal_code && grade == null && this.state.editableGrade.editable == true)? saveButton: editButton} */}
+                                        {(grade == null || grade == 0) ? (this.state.editableGrade.internal_code == sub.internal_code && this.state.editableGrade.editable == true)? saveButton: editButton : ""
+
+                                        }
                                     </p>
                                 </th>
                             </tr>

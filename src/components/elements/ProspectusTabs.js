@@ -15,6 +15,9 @@ export default class ProspectusTabs extends Component {
         this.props.handleOnClickTab(tab, value);
         console.log("checkTab",selectedTab);
     }
+    printOrder = () =>{
+        this.props.printOrder();
+    }
     getTotalBehind = (yearlevel) =>{
         const {subjects, grades} = this.props;
         var countSubject = 0;
@@ -64,7 +67,7 @@ export default class ProspectusTabs extends Component {
                     </span>
                     <span>View All</span>
                 </button>
-                <button name="approved" className="button ml-5">
+                <button name="approved" className="button ml-5" onClick={this.printOrder}>
                     <span className="icon is-small">
                         <i className="fas fa-print"></i>
                     </span>

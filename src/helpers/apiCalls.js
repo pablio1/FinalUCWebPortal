@@ -1445,3 +1445,35 @@ export function updateRequestStatus(data){
     });
 }
 
+export function getStudentGrades(data){
+    const headers = { 
+        'Access-Control-Allow-Origin': '*',
+        'Authorization': 'Bearer ' + store.get("token")
+    };
+    return axios.post(process.env.REACT_APP_API_GET_STUDENT_GRADES, data, {headers})
+    .catch(error => {
+        console.log(error);
+    });
+}
+
+export function setStudentGrades(data){
+    const headers = { 
+        'Access-Control-Allow-Origin': '*',
+        'Authorization': 'Bearer ' + store.get("token")
+    };
+    return axios.post(process.env.REACT_APP_API_SET_STUDENT_GRADES, data, {headers})
+    .catch(error => {
+        console.log(error);
+    });
+}
+
+export function setEvaluationStatus(data){
+    const headers = { 
+        'Access-Control-Allow-Origin': '*',
+        'Authorization': 'Bearer ' + store.get("token")
+    };
+    return axios.post(process.env.REACT_APP_API_SET_GRADE_EVALUATION, data, {headers})
+    .catch(error => {
+        console.log(error);
+    });
+}

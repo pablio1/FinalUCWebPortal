@@ -71,8 +71,9 @@ export class Prospectus extends Component {
         this.setState({
             selectedTab: tab
         });
+
         
-        //console.log("testLog", selectedTab);
+        console.log("testLog", tab);
     }
     handlerButtonTest = () => {
         const {test} = this.state;
@@ -80,6 +81,13 @@ export class Prospectus extends Component {
             test: !test
         }); 
         console.log("testing",test);
+    }
+    printOrder = () => {
+        var printableElements = document.getElementById('print').innerHTML;
+        var oldPage = document.body.innerHTML;
+        document.body.innerHTML = '<html><head><title></title></head><body>' + printableElements + '</body></html>';
+        window.print();
+        document.body.innerHTML = oldPage
     }
     render() {
         const {selectedTab, totalBehind, subjects,requisites, grades, selectedSubject, schedules,
@@ -90,6 +98,7 @@ export class Prospectus extends Component {
         {
             loadCurriculumTable = (
                 <ProspectusTable
+                    printAbleID = 'print'
                     selectedTab = {selectedTab}
                     totalBehind = {totalBehind}
                     handleOnClickTab = {this.handleOnClickTab}
@@ -118,6 +127,7 @@ export class Prospectus extends Component {
                     grades = {grades}
                     subjects = {subjects}
                     years = {years}
+                    printOrder = {this.printOrder}
                     semesters = {semesters}
                     handleOnClickTab = {this.handleOnClickTab}
                 />

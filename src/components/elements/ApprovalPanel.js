@@ -45,6 +45,9 @@ export default class ApprovalPanel extends Component {
     handleOnClickBack = () =>{
         this.props.handleOnClickBack();
     }
+    handleSubmitEvaluation = () =>{
+        this.props.handleSubmitEvaluation();
+    }
     render() {        
         const {studentInfo,isEvaluate ,approver, sections, currentTab, disapproveMsg, sectionValue, title, disableApproveBtn, step, amountCanPay, textMsgMaxChar, curr_year,selectedCurrYear} = this.props;   
         const { showDisapprovedModal, disapproveButtonLabel, showApprovedModal, approveButtonLabel } = this.state;
@@ -124,6 +127,15 @@ export default class ApprovalPanel extends Component {
                 <span>{disapproveButtonLabel}</span>                                
             </button>
         );
+        const submitBtn = (
+            <button className="button is-small is-info mt-0 has-text-weight-semibold" name="disapproveBtn"
+                    onClick={this.handleSubmitEvaluation}>
+                <span className="icon is-small">
+                    <i className="fas fa-check"></i>
+                </span>
+                <span>Submit</span>                                
+            </button>
+        );
         /*const pendingBtn = (
             <button className="button is-small is-info mt-0 has-text-weight-semibold" name="pendingBtn"
                     onClick={() => this.handleOnButtonClick("pending")}>
@@ -139,6 +151,7 @@ export default class ApprovalPanel extends Component {
             showButtons = (
                 <Fragment>
                     {currentTab !== "evaluate"? approvedBtn:""}
+                    {currentTab === "evaluate"? submitBtn: ""}
                     {currentTab === "evaluate"?evaluateBtn:""}
                     {currentTab !== "evaluate"? (approver === "ACCOUNTING" || approver === "CASHIER" || step === "DeanPromissory" || step === "promissoryExam" ? "" : disapprovedBtn):""}  
                 </Fragment>
