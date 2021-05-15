@@ -15,12 +15,13 @@ export class Prospectus extends Component {
             getYear: null, years:null, semesters: null,curr_year:null, units: null
     }
     componentDidMount = () => {
-        console.log("curryear",getLoggedUserDetails("curryear"));
+        console.log("",getLoggedUserDetails("deptabbr"));
         if(getLoggedUserDetails("curryear") != 0){
             console.log("test");
             var data = {
                 id_number: getLoggedUserDetails("idnumber"),
-                year: getLoggedUserDetails("curryear")
+                year: getLoggedUserDetails("curryear"),
+                term: process.env.REACT_APP_CURRENT_SCHOOL_TERM
             }
             getCurriculum(data)
             .then(response => {  

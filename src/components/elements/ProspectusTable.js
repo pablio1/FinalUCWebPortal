@@ -92,8 +92,8 @@ export default class ProspectusTable extends Component {
                     <tr className = {(getGrades > 30 && getLoggedUserDetails("yearlevel")>selectedTab) || (getGrades === 0 && getLoggedUserDetails("yearlevel")>selectedTab)? "has-background-danger-light": ""}>
                         <td>{sub.subject_name}</td>
                         <td>{sub.descr_1}</td>
-                        <td className="has-text-centered">{sub.units}</td>
-                        <td className="has-text-centered">{labUnit}</td>
+                        <td className="has-text-centered">{(sub.subject_type == "L" && sub.split_type == "S" ? 0 : sub.units)}</td>
+                        <td className="has-text-centered">{(sub.subject_type == "L" && sub.split_type == "S" ? sub.units:labUnit)}</td>
                         <td className="has-text-centered">{parseInt(sub.units)+ labUnit}</td>
                         <td>{getCorequisites.length > 0 ? "Taken together with "+getCorequisites:getPrerequisites}</td>
                         <td className={"has-text-centered has-text-weight-bold "+ (getGrades > 30 ? "has-text-danger":"has-text-info")} >{getGrades !== 0 && grade}</td>
@@ -192,11 +192,13 @@ export default class ProspectusTable extends Component {
                 var totalUnits = 0;
                 var countSummer = 0;
                 var countRegular = 0;
-                var loadSubjects = subjects? subjects.filter(fil => fil.year_level == year && fil.semester == semester && fil.subject_type != 'L').map((sub, i)=>{
+                var loadSubjects = subjects? subjects.filter(fil => fil.year_level == year && fil.semester == semester && fil.split_type=="S").map((sub, i)=>{
                     let labUnit = hasSubjectLab(subjects, sub.internal_code);
                     totalUnits = labUnit + parseInt(sub.units)+ totalUnits;
                     var countPrerequisite = 0;
                     var countCorequisite = 0;
+                    var getGrades = getGrade(grades, sub.internal_code);
+                    let grade = isNumeric(getGrades) && getGrades.length === 2 ? getGrades.charAt(0) + "." +  getGrades.charAt(1) : getGrades;
                     var countCore = 0;
                     var temp = null;
                     var loadSummerSubjects = subjects.filter(f => f.semester != 3 && f.year_level == year).map((summer, i)=>{
@@ -220,16 +222,11 @@ export default class ProspectusTable extends Component {
                             <tr key={i}>
                                 <td>{sub.subject_name}</td>
                                 <td>{sub.descr_1}</td>
-                                <td></td>
-                                <td></td>
+                                <td className="has-text-centered">{(sub.subject_type == "L" && sub.split_type == "S" ? 0 : sub.units)}</td>
+                                <td className="has-text-centered">{(sub.subject_type == "L" && sub.split_type == "S" ? sub.units:labUnit)}</td>
                                 <td className="has-text-centered">{labUnit + parseInt(sub.units)}</td>
                                 <td className="has-text-centered">{(countCore>0)?"Taken together with "+getCorequisites:getPrerequisites}</td>
-                                <td className="has-text-centered"> 
-                                    {/* {
-                                        (this.state.editableGrade.editable == true && this.state.editableGrade.internal_code == sub.internal_code)&&
-                                        <input className="input is-small"/>
-                                    } */}
-                                </td>
+                                <td className="has-text-centered">{grade != 0 ? grade: ""} </td>
                                 
                             </tr>
                         </Fragment>

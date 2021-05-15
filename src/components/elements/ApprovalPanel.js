@@ -151,7 +151,7 @@ export default class ApprovalPanel extends Component {
             showButtons = (
                 <Fragment>
                     {currentTab !== "evaluate"? approvedBtn:""}
-                    {currentTab === "evaluate"? submitBtn: ""}
+                    {isEvaluate? submitBtn: ""}
                     {currentTab === "evaluate"?evaluateBtn:""}
                     {currentTab !== "evaluate"? (approver === "ACCOUNTING" || approver === "CASHIER" || step === "DeanPromissory" || step === "promissoryExam" ? "" : disapprovedBtn):""}  
                 </Fragment>

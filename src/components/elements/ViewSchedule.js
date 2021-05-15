@@ -1,13 +1,27 @@
 import React, { Component } from 'react';
 import { Fragment } from 'react';
 import { getLoggedUserDetails } from '../../helpers/helper';
+import { getSubjectEquivalence } from '../../helpers/apiCalls';
 
 export default class ViewSchedule extends Component {
     
     state ={
-        showHide: false
+        showHide: false, equivalence: null
     }
-
+    componentDidMount= () => {
+        var data = {
+            internal_code : this.props.internal_code
+        }
+        getSubjectEquivalence(data)
+        .then(response => {
+            if(response.data){
+                this.setState({
+                    equivalence: response.data.subjects
+                });
+                console.log(response.data);
+            }
+        })
+    }
     handleAlternativeButton = () => {
         const{showHide} = this.state;
         this.setState({

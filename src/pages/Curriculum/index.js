@@ -33,6 +33,11 @@ export class Curriculum extends Component {
             }
           ]
     }
+	handleCloseNotification = () =>{
+		this.setState({
+			success: null
+		});
+	}
     componentDidMount = () => {
 		this.loadCurriculum();
     }
@@ -139,31 +144,46 @@ export class Curriculum extends Component {
   
     handleSubmit = async () => {
 		//console.log("submitting: ", this.state.rows);
+		
 		const {schoolYear, rows,selectedCourse} = this.state;
-		var data = {
-			curr_year: schoolYear,
-			course: selectedCourse,
-			subjects: this.state.rows
+		if(schoolYear == null || schoolYear == "") {
+			alert("Please assign school year for the new curriculum.");
 		}
-		console.log("data", data);
-
-		saveCurriculum(data)
-		.then(response => {  
-			if(response.data) {          
-				this.setState({
-					success: response.data.success
-				});
-				if(response.data.success == 1){
-					this.setState({
-						schoolYear: null,
-						selectedCourse: null,
-						rows: null
-					});
-				}
-				this.loadCurriculum();
-				console.log("response", response.data);
+		if(selectedCourse == null || selectedCourse == "") {
+			alert("Please select a course.");
+		}
+		if(rows.length == 0) {
+			alert("You cannot submit an empty data!");
+		}
+		if(schoolYear != null && selectedCourse != null && rows.length != 0){
+			var data = {
+				curr_year: schoolYear,
+				course: selectedCourse,
+				subjects: this.state.rows
 			}
-		});
+			console.log("data", data);
+
+			saveCurriculum(data)
+			.then(response => {  
+				if(response.data) {          
+					this.setState({
+						success: response.data.success
+					});
+					if(response.data.success == 1){
+						this.setState({
+							schoolYear: null,
+							selectedCourse: null,
+							rows: null
+						});
+					}
+					this.loadCurriculum();
+					console.log("response", response.data);
+				}
+			});
+		}
+
+		
+		
 		
 
 		//submit to API
@@ -322,6 +342,7 @@ export class Curriculum extends Component {
 				handleSubmit={this.handleSubmit}
 				handleAdd={this.handleAdd}
 				success = {success}
+				handleCloseNotification = {this.handleCloseNotification}
 			/>
 		) : ""; 
 		return (

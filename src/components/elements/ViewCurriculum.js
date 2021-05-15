@@ -97,7 +97,7 @@ export default class componentName extends Component {
             var countSummer = 0;
             var countRegular = 0;
             var totalUnits = 0;
-            var loadSubjects = subjects? subjects.filter(fil => fil.year_level == year && fil.semester == semester && fil.subject_type != 'L').map((sub, i)=>{
+            var loadSubjects = subjects? subjects.filter(fil => fil.year_level == year && fil.semester == semester && fil.split_type=="S").map((sub, i)=>{
                 let labUnit = hasSubjectLab(subjects, sub.internal_code);
                 totalUnits = labUnit + parseInt(sub.units)+ totalUnits;
                 var loadSummerSubjects = subjects.filter(f => f.semester != 3 && f.year_level == year).map((summer, i)=>{
@@ -116,8 +116,8 @@ export default class componentName extends Component {
                         <tr key={i}>
                             <td>{sub.subject_name}</td>
                             <td>{sub.descr_1}</td>
-                            <td className="has-text-centered">{sub.units}</td>
-                            <td className="has-text-centered">{labUnit}</td>
+                            <td className="has-text-centered">{(sub.subject_type == "L" && sub.split_type == "S" ? 0 : sub.units)}</td>
+                            <td className="has-text-centered">{(sub.subject_type == "L" && sub.split_type == "S" ? sub.units:labUnit)}</td>
                             <td className="has-text-centered">{labUnit + parseInt(sub.units)}</td>
                             <td className="has-text-centered">{getPrerequisites}</td>
                         </tr>

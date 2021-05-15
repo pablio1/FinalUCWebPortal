@@ -81,7 +81,8 @@ class DeanEvaluation extends Component {
         const {selectedStudentID, selectedCurrYear} = this.state;
         var data = {
             id_number: selectedStudentID,
-            year: selectedCurrYear
+            year: selectedCurrYear,
+            term: process.env.REACT_APP_CURRENT_SCHOOL_TERM
         }
         console.log("test",data);
         getCurriculum(data)
@@ -481,7 +482,7 @@ class DeanEvaluation extends Component {
                 var totalUnits = 0;
                 var countSummer = 0;
                 var countRegular = 0;
-                var loadSubjects = subjects? subjects.filter(fil => fil.year_level == year && fil.semester == semester && fil.subject_type != 'L').map((sub, i)=>{
+                var loadSubjects = subjects? subjects.filter(fil => fil.year_level == year && fil.semester == semester && fil.split_type=="S").map((sub, i)=>{
                     let labUnit = hasSubjectLab(subjects, sub.internal_code);
                     totalUnits = labUnit + parseInt(sub.units)+ totalUnits;
                     var countPrerequisite = 0;

@@ -29,7 +29,8 @@ export class RequestSubjects extends Component {
         if(getLoggedUserDetails("curryear") != 0 ){
             var data = {
                 id_number: getLoggedUserDetails("idnumber"),
-                year: getLoggedUserDetails("curryear")
+                year: getLoggedUserDetails("curryear"),
+                term: process.env.REACT_APP_CURRENT_SCHOOL_TERM
             }
             getCurriculum(data)
             .then(response => {  

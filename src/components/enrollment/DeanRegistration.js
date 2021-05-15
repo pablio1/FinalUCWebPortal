@@ -83,7 +83,8 @@ class DeanRegistration extends Component {
         console.log("StudentInfo", this.state.studentInfo);
         var data = {
             id_number: selectedStudentID,
-            curr_year: selectedCurrYear
+            curr_year: selectedCurrYear,
+            term: process.env.REACT_APP_CURRENT_SCHOOL_TERM
         }
         getCurriculum(data)
             .then(response => {  
@@ -126,7 +127,7 @@ class DeanRegistration extends Component {
             selectedStudentID: idNum,
             selectedStudentClassification: classification, 
             selectedStudentCourseCode: courseCode,
-            section: ''
+            section: '',
         }, () => this.getStudentInfoData() );
     }
     handleApprovalButton = e => {   
@@ -266,7 +267,8 @@ class DeanRegistration extends Component {
                 if(["N1","K1"].includes(response.data.course_code)) yearLevel = response.data.course_code;
                 this.setState({
                     studentInfo: response.data,
-                    allowed_units: response.data.allowed_units, 
+                    allowed_units: response.data.allowed_units,
+                    selectedCurrYear: response.data.curr_year,
                     year_level: yearLevel, 
                     classification: response.data.classification,
                     stud_id: response.data.stud_id,
@@ -291,7 +293,8 @@ class DeanRegistration extends Component {
                 
                 this.setState({
                     studentInfo: response.data,
-                    allowed_units: response.data.allowed_units, 
+                    allowed_units: response.data.allowed_units,
+                    selectedCurrYear: response.data.curr_year,
                     year_level: yearLevel, 
                     classification: response.data.classification,
                     stud_id: response.data.stud_id,

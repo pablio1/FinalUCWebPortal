@@ -4,6 +4,9 @@ import CurriculumTable from '../../components/elements/CurriculumTable';
 import { ExcelRenderer } from "react-excel-renderer";
 
 export default class AddCurriculum extends Component {
+    handleCloseNotification = () =>{
+        this.props.handleCloseNotification();
+    }
   render() {
       const{schoolYear, inputChange,courses,fileHandler,cols,rows,
         columns,components,handleSubmit,handleAdd,success} = this.props;
@@ -16,10 +19,16 @@ export default class AddCurriculum extends Component {
             </Fragment>
         )
     }):"";
-    var loadNotification = success?(
-        <div className={"notification "+(success>0 ? " is-info":" is-danger")}>
-            <button class="delete"></button>
-            {success > 0 ? "Success":"Failed"}
+    var loadNotificationSuccess = success?(
+        <div className="notification is-info">
+            <button class="delete" onClick = {this.handleCloseNotification}></button>
+            Success
+        </div>
+    ):"";
+    var loadNotificationFailed = success?(
+        <div className="notification is-danger">
+            <button class="delete" onClick={this.handleCloseNotification}></button>
+            Something went wrong!
         </div>
     ):"";
     return (
@@ -85,7 +94,8 @@ export default class AddCurriculum extends Component {
             </div>
             <div className="columns">
                 <div className="column is-fullwidth">
-                    {loadNotification}
+                    {success === 1? loadNotificationSuccess:""}
+                    {success === 0? loadNotificationFailed:""}
                 </div>
             </div>
             <div className="columns">
