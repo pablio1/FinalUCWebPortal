@@ -208,7 +208,6 @@ export default class SubjectInfo extends Component {
             internal_code: selectedSubject,
             requisite: internal_code,
             requisite_type: type
-
         }
         //console.log("Data",data);
         removePrerequisite(data)
@@ -234,6 +233,7 @@ export default class SubjectInfo extends Component {
     }
     handleSwitchButton = (descr, course_code) =>{
         const {switchEquivalence} = this.state;
+        const {selectedSubject} = this.props;
         if(!switchEquivalence){
             this.setState({
                 switchEquivalence: "checked"
@@ -242,7 +242,8 @@ export default class SubjectInfo extends Component {
                 description: descr,
                 units: 0,
                 course_code: course_code,
-                curr_year: this.props.schoolYear
+                curr_year: this.props.schoolYear,
+                internal_code: selectedSubject
             }
             getEquivalence(data)
             .then(response => {

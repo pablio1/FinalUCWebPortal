@@ -1,6 +1,6 @@
 import React, { Component, Fragment} from "react";
 import SpinnerGif from '../../assets/sysimg/spinner.gif'
-import { getCurriculum} from '../../helpers/apiCalls';
+import { getCurriculum,getStudentGrades} from '../../helpers/apiCalls';
 import { getLoggedUserDetails, convertTabToYear, convertYearToTab,hasSubjectLab } from '../../helpers/helper';
 
 import ProspectusTabs  from '../../components/elements/ProspectusTabs';
@@ -12,7 +12,7 @@ export class Prospectus extends Component {
     state = {
         selectedTab: null ,totalBehind: 0,subjects: null, schedules: null, selectedSubject: null,showModal: false,
         idnumber: null,yearlevel: null, requisites: null, grades: null, internal_code:null, subjectDescription: null,
-            getYear: null, years:null, semesters: null,curr_year:null, units: null
+            getYear: null, years:null, semesters: null,curr_year:null, units: null,dept:null
     }
     componentDidMount = () => {
         console.log("",getLoggedUserDetails("deptabbr"));
@@ -23,19 +23,23 @@ export class Prospectus extends Component {
                 year: getLoggedUserDetails("curryear"),
                 term: process.env.REACT_APP_CURRENT_SCHOOL_TERM
             }
-            getCurriculum(data)
+            console.log("dept", getLoggedUserDetails("dept"));
+            getCurriculum(data, getLoggedUserDetails("dept"))
             .then(response => {  
                 if(response.data) {          
                     this.setState({
                         subjects: response.data.subjects,
                         selectedTab: getLoggedUserDetails("yearlevel"),
                         requisites: response.data.requisites,
-                        grades: response.data.grades,
+                        dept: response.data.dept,
                         schedules: response.data.schedules,
                         getYear: response.data.course_code,
                         curr_year: response.data.curr_year,
-                        units: response.data.units
+                        units: response.data.units,
+                        grades: response.data.grades
                     });
+                    console.log("panot", response.data);
+                    
                     const {subjects} = this.state;
                     const year = [...new Set(subjects.map(item => item.year_level))]
                     this.setState({
@@ -45,11 +49,15 @@ export class Prospectus extends Component {
                     this.setState({
                         semesters: semester
                     });
+
+                    console.log("grade test",this.state.grades)
                 }
             });  
             
+            
         }
     }
+    
     closeModal = () => {
         this.setState({
             showModal: false
@@ -98,7 +106,7 @@ export class Prospectus extends Component {
         if(subjects)
         {
             loadCurriculumTable = (
-                <ProspectusTable
+                 <ProspectusTable
                     printAbleID = 'print'
                     selectedTab = {selectedTab}
                     totalBehind = {totalBehind}
@@ -108,7 +116,7 @@ export class Prospectus extends Component {
                     grades = {grades}
                     semesters={semesters}
                     viewScheduleButtonHandle = {this.viewScheduleButtonHandle}
-                />
+                /> 
             );
         }
 
@@ -164,6 +172,7 @@ export class Prospectus extends Component {
                 <div className="columns">
                     <div className="column is-four-fifths">
                         {studentApproved}
+                        <button onClick={this.btnTest} hidden></button>
                     </div>
                 </div>
             </div>

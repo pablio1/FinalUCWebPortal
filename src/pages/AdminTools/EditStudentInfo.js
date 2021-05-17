@@ -127,6 +127,8 @@ class EditStudentInfo extends Component {
                             this.setState({ courses: response.data.colleges });      
                         });
                     });
+
+                    console.log("studentINFO", response.data)
                 }
                 else {
                     alert("ID Number not found!")

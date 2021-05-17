@@ -11,7 +11,7 @@ import StudentInfoWithGrades from '../enrollment/StudentInfoWithGrades';
 import GradesTable from '../../components/elements/GradesTable';
 import SpinnerGif from '../../assets/sysimg/spinner.gif'
 import { getLoggedUserDetails,hasSubjectLab } from '../../helpers/helper';
-import { updateStudentStatus,getCurriculum, getAllCurriculum, getStudentList, getOpenSections, getOldStudentInfo, getStudentInfo, getStatusCount, getGradesEvaluation, getCourses } from '../../helpers/apiCalls';
+import { updateStudentStatus,getStudentGrades,getCurriculum, getAllCurriculum, getStudentList, getOpenSections, getOldStudentInfo, getStudentInfo, getStatusCount, getGradesEvaluation, getCourses } from '../../helpers/apiCalls';
 
 class DeanRegistration extends Component {
     static propTypes = {
@@ -24,7 +24,7 @@ class DeanRegistration extends Component {
             studentInfo: null, studentList: null, studentGrades: null, sections: null,
             name: '', course: '', course_department: '', date: '', id_number: '', session: '', 
             allowed_units: 0, year_level: '', classification: '', totalRecords: 0, section: '', stud_id: '',
-            disapproveMsg: '', courses: null,  filterYearLevel: 0,requesites: null,grades:null,
+            disapproveMsg: '', courses: null,  filterYearLevel: 0,requesites: null,grades:null,dept: null,
             selectedStudentID: '', selectedStudentCourseCode: '', selectedStudentClassification: '', selectedTab: 'pending',
             showPreloader: false, isLoadingStudentList: false, curr_year: null, selectedCurrYear: null, isEvaluate:false, year:null, semester: null,subjects: null, editableGrade: [{internal_code: null, editable: false}]
         };
@@ -76,7 +76,7 @@ class DeanRegistration extends Component {
         }, () =>  this.getFilteredStudentList() );              
     }
     handleOnClickEvaluate = () =>{
-        const {isEvaluate,selectedStudentID,selectedCurrYear} = this.state;
+        const {isEvaluate,selectedStudentID,selectedCurrYear,studentInfo} = this.state;
         this.setState({
             isEvaluate: !isEvaluate
         });
@@ -86,12 +86,13 @@ class DeanRegistration extends Component {
             curr_year: selectedCurrYear,
             term: process.env.REACT_APP_CURRENT_SCHOOL_TERM
         }
-        getCurriculum(data)
+        getCurriculum(data,studentInfo.dept)
             .then(response => {  
                 if(response.data) {          
                     this.setState({
                         subjects: response.data.subjects,
                         requisites: response.data.requisites,
+                        dept: response.data.dept,
                         grades: response.data.grades
                     });
                     const {subjects} = this.state;
@@ -109,6 +110,7 @@ class DeanRegistration extends Component {
                 }
             }); 
     }
+    
     handleOnchangeInput = (key, value) => {
         
         this.setState({

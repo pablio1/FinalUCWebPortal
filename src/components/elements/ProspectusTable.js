@@ -32,7 +32,7 @@ export default class ProspectusTable extends Component {
     }
     viewButtonVisibity = (grade) => {
         var visible = false;
-        if((grade > 30 || grade === 0 ) && grade != null && this.props.selectedTab <= getLoggedUserDetails("yearlevel")){
+        if((grade <= 3.0 || grade === 0 ) && grade != null && this.props.selectedTab <= getLoggedUserDetails("yearlevel")){
             visible = true;
         }
         return visible;
@@ -45,7 +45,7 @@ export default class ProspectusTable extends Component {
         var loadRemark = requisites? requisites.filter(filt => filt.internal_code == internal_code).map((remark, index)=>{
             countRemark++; //1
             var loadGrade = grades ? grades.filter(fil => fil.internal_code == remark.requisites).map((grade, key)=>{
-                if( grade.final_grade < 3)
+                if( grade.final_grade < 30)
                     countGrade++;
             }) : "";
         }) : "";
@@ -97,7 +97,7 @@ export default class ProspectusTable extends Component {
                         <td className="has-text-centered">{parseInt(sub.units)+ labUnit}</td>
                         <td>{getCorequisites.length > 0 ? "Taken together with "+getCorequisites:getPrerequisites}</td>
                         <td className={"has-text-centered has-text-weight-bold "+ (getGrades > 30 ? "has-text-danger":"has-text-info")} >{getGrades !== 0 && grade}</td>
-                        <td>{  this.viewButtonVisibity(getGrades) && this.checkPrerequisiteStatus(sub.internal_code)? <button className="button is-info is-small" onClick={() => this.viewScheduleButtonHandle(sub.subject_name, sub.internal_code, sub.descr_1)}>View Schedules</button>  : "" }</td>
+                        <td>{  this.viewButtonVisibity(grade) && this.checkPrerequisiteStatus(sub.internal_code)? <button className="button is-info is-small" onClick={() => this.viewScheduleButtonHandle(sub.subject_name, sub.internal_code, sub.descr_1)}>View Schedules</button>  : "" }</td>
                     </tr> 
                 </Fragment>
 

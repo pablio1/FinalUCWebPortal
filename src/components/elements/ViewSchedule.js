@@ -30,7 +30,7 @@ export default class ViewSchedule extends Component {
     }
 
   render() {
-      const {showHide} = this.state;
+      const {showHide,equivalence} = this.state;
       const{schedules, selectedSubject,subjectDescription,internal_code} = this.props;
         let count =0;
         let countAlternative = 0
@@ -65,9 +65,9 @@ export default class ViewSchedule extends Component {
         )
       }) : "";
 
-      var loadAlternativeSubjects = schedules ? schedules.filter(filt => filt.desc_1 == subjectDescription).map((sched, index)=>{
+      var loadAlternativeSubjects = equivalence ? equivalence.map((sched, index)=>{
         countAlternative++;
-        const splitCodes = schedules.filter(splt => splt.edp_code == sched.split_code).map((split, isplit)=>{
+        const splitCodes = schedules.filter(splt => splt.edp_code == sched.internal_code).map((split, isplit)=>{
             return(
                 <tr key={isplit} className="has-background-link-light">
                     <td className="valign pt-0 pb-0">{split.edp_code}</td>

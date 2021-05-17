@@ -2,7 +2,7 @@ import React, { Component,Fragment } from "react";
 import { withRouter } from 'react-router-dom';
 import SubjectForm from '../../components/enrollment/RequestSubjectForm';
 import SearchRequestSubject from '../../components/elements/SearchRequestSubject';
-import { getCurriculum, getStudentRequest,saveSubjectRequest,getStudentRequestSubject,addStudentRequest,cancelStudentRequest } from '../../helpers/apiCalls';
+import { getCurriculum,getStudentGrades, getStudentRequest,saveSubjectRequest,getStudentRequestSubject,addStudentRequest,cancelStudentRequest } from '../../helpers/apiCalls';
 import { getLoggedUserDetails,checkRequestedSubject,toStandardTime,autoTimeEndSetter } from "../../helpers/helper";
 import RequestedSubjects from '../../components/elements/RequestedSubjects';
 
@@ -32,12 +32,14 @@ export class RequestSubjects extends Component {
                 year: getLoggedUserDetails("curryear"),
                 term: process.env.REACT_APP_CURRENT_SCHOOL_TERM
             }
-            getCurriculum(data)
+            getCurriculum(data,getLoggedUserDetails("dept"))
             .then(response => {  
                 if(response.data) {          
                     this.setState({
-                        subjects:  response.data.subjects
+                        subjects:  response.data.subjects,
+                        grades: response.data.grades
                     });
+                    
                 }
             }); 
         }
@@ -50,14 +52,13 @@ export class RequestSubjects extends Component {
             if(response.data) {          
                 this.setState({
                     requestedSubjects:  response.data.request,
-                    filteredSubjects: response.data.filtered
+                    filteredSubjects: response.data.filtered,
                 });
                 //this.sanitizedSubjectList();
             }
         });
         
     }
-    
    
     inputChange = input => e => {
         const{days} = this.state;

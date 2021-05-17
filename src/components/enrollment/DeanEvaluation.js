@@ -11,7 +11,7 @@ import StudentInfoWithGrades from '../enrollment/StudentInfoWithGrades';
 import GradesTable from '../../components/elements/GradesTable';
 import SpinnerGif from '../../assets/sysimg/spinner.gif'
 import { getLoggedUserDetails,hasSubjectLab,getGrade,isNumeric } from '../../helpers/helper';
-import { updateStudentStatus,getCurriculum,setStudentGrades,setEvaluationStatus,getAllCurriculum, getStudentList, getOpenSections, getOldStudentInfo, getStudentInfo, getStatusCount, getGradesEvaluation, getCourses } from '../../helpers/apiCalls';
+import { updateStudentStatus,getStudentGrades,getCurriculum,setStudentGrades,setEvaluationStatus,getAllCurriculum, getStudentList, getOpenSections, getOldStudentInfo, getStudentInfo, getStatusCount, getGradesEvaluation, getCourses } from '../../helpers/apiCalls';
 
 class DeanEvaluation extends Component {
     static propTypes = {
@@ -27,7 +27,7 @@ class DeanEvaluation extends Component {
             disapproveMsg: '', courses: null,  filterYearLevel: 0,requesites: null,grades:null,
             selectedStudentID: '', selectedStudentCourseCode: '', selectedStudentClassification: '', selectedTab: 'evaluate',
             showPreloader: false, isLoadingStudentList: false, curr_year: null, selectedCurrYear: null, isEvaluate:false, year:null, semester: null,subjects: null, editableGrade: [{internal_code: null, editable: false}],
-            setGrade: null
+            setGrade: null, dept:null
         };
     }
     componentDidMount = () => {
@@ -78,21 +78,23 @@ class DeanEvaluation extends Component {
         }, () =>  this.getFilteredStudentList() );              
     }
     handleLoadCurriculum = () => {
-        const {selectedStudentID, selectedCurrYear} = this.state;
+        const {selectedStudentID, selectedCurrYear,studentInfo} = this.state;
         var data = {
             id_number: selectedStudentID,
             year: selectedCurrYear,
             term: process.env.REACT_APP_CURRENT_SCHOOL_TERM
         }
         console.log("test",data);
-        getCurriculum(data)
+        getCurriculum(data, studentInfo.dept)
             .then(response => {  
                 if(response.data) {          
                     this.setState({
                         subjects: response.data.subjects,
                         requisites: response.data.requisites,
+                        dept: response.data.dept,
                         grades: response.data.grades
                     });
+
                     console.log("response",response.data);
                     const {subjects} = this.state;
                     const year = [...new Set(subjects.map(item => item.year_level))]
@@ -108,7 +110,7 @@ class DeanEvaluation extends Component {
             }); 
     }
     handleOnClickEvaluate = () =>{
-        const {isEvaluate,selectedStudentID,selectedCurrYear} = this.state;
+        const {isEvaluate,selectedStudentID,selectedCurrYear,studentInfo} = this.state;
 
         if(this.state.selectedCurrYear === "" || this.state.selectedCurrYear === null) {
             alert("Please assign the curriculum of the student.");
@@ -119,6 +121,7 @@ class DeanEvaluation extends Component {
             });
             this.handleLoadCurriculum();
         } 
+
     }
     handleOnchangeInput = (key, value) => {
         
@@ -296,6 +299,7 @@ class DeanEvaluation extends Component {
                     console.log("studentGrades:",this.state.studentGrades);
                 });
             });   
+            
         }
         else {            
             getStudentInfo(this.state.selectedStudentID, 0, cookies.get("selterm")) 

@@ -17,7 +17,10 @@ export default class RequestedSujects extends Component {
                         <td className="has-text-centered">{request.days}</td>
                         <td className="has-text-centered">{request.time_start} - {request.time_end} {request.mdn}</td>
                         <td className="has-text-centered">{request.size}</td>
-                        <th className="has-text-centered has-text-info">{request.status}</th>
+                        <th className="has-text-centered has-text-info">
+                            {request.status == 0 ? "Pending":""}
+                            {request.status == 3 ? "Approved":""}
+                        </th>
                         <td className="has-text-centered">
                             <button className="button is-small is-danger" onClick={() => handleCancelSubjectButton(request.internal_code)}>Cancel</button>
                         </td>

@@ -635,7 +635,7 @@ class SubjectSelection extends Component {
                     </button>     
                     <button className="button is-small is-info" onClick={this.handleOnClickSuggestion}>
                         <span className="icon is-small">
-                        <i className="fas fa-angle-left"></i>
+                        <i className=""></i>
                         </span>
                         <span>Suggestions</span>
                     </button>          

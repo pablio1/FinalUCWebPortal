@@ -1,6 +1,6 @@
 import React, { Component, Fragment} from "react";
 import SpinnerGif from '../../assets/sysimg/spinner.gif'
-import { getCurriculum} from '../../helpers/apiCalls';
+import { getCurriculum,getStudentGrades} from '../../helpers/apiCalls';
 import { getGrade} from '../../helpers/helper';
 import { getLoggedUserDetails, convertTabToYear, convertYearToTab } from '../../helpers/helper';
 import ViewSchedule from '../../components/elements/ViewSchedule';
@@ -8,7 +8,7 @@ import ViewSchedule from '../../components/elements/ViewSchedule';
 export class BehindSubject extends Component {
     state = {
         prerequisites: null,subjects: null, grades: null, schedules: null,selectedSubject: null, internal_code: null, subjectDescription: null
-        ,showModal: false,curr_year:null, units:null
+        ,showModal: false,curr_year:null, units:null, dept: null
     }
     viewScheduleButtonHandle = (selected, internal, description) =>{
         const{selectedSubject,internal_code,subjectescription} = this.state;
@@ -60,16 +60,17 @@ export class BehindSubject extends Component {
                 year: getLoggedUserDetails("curryear"),
                 term: process.env.REACT_APP_CURRENT_SCHOOL_TERM
             }
-            getCurriculum(data)
+            getCurriculum(data,getLoggedUserDetails("dept"))
             .then(response => {  
                 if(response.data) {          
                     this.setState({
                         subjects: response.data.subjects,
                         prerequisites: response.data.prerequisites,
-                        grades: response.data.grades,
+                        dept: response.data.dept,
                         schedules: response.data.schedules,
                         curr_year: response.data.curr_year,
-                        units: response.data.units
+                        units: response.data.units,
+                        grades: response.data.grades
                     });
                 }
             });

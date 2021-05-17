@@ -1236,12 +1236,16 @@ export function getTeacherListByDept(dept, activeTerm) {
     });
 }
 
-export function getCurriculum(data) {
+export function getCurriculum(data,dept) {
     const headers = { 
         'Access-Control-Allow-Origin': '*',
         'Authorization': 'Bearer ' + store.get("token")
     };
-    return axios.post(process.env.REACT_APP_API_GET_CURRICULUM, data, {headers})
+    var api = process.env.REACT_APP_API_GET_CURRICULUM_BE;
+    if(dept == "CL" || dept == "SH")
+        api = process.env.REACT_APP_API_GET_CURRICULUM;
+
+    return axios.post(api, data, {headers})
             .catch(error => {
                 console.log(error);
             });
@@ -1445,12 +1449,16 @@ export function updateRequestStatus(data){
     });
 }
 
-export function getStudentGrades(data){
+export function getStudentGrades(data, dept){
     const headers = { 
         'Access-Control-Allow-Origin': '*',
         'Authorization': 'Bearer ' + store.get("token")
     };
-    return axios.post(process.env.REACT_APP_API_GET_STUDENT_GRADES, data, {headers})
+    var api = process.env.REACT_APP_API_GET_STUDENT_GRADES_BE;
+    if(dept == "CL" || dept == "SHS")
+        api = process.env.REACT_APP_API_GET_STUDENT_GRADES;
+
+    return axios.post(api, data, {headers})
     .catch(error => {
         console.log(error);
     });

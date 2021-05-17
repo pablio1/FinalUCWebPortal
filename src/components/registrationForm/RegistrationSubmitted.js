@@ -48,9 +48,11 @@ export default class RegistrationSubmitted extends Component {
             <div className="section mt-0 pt-0">
                 <div className="columns">
                     <div className="column pt-0"> 
-                        {formSubmitted ? <PromptSuccess /> : <PromptFailed />}
+                        {/* {formSubmitted ? <PromptSuccess /> : <PromptFailed />} */}
+                        {formSubmitted ? <PromptSuccess /> : <PromptSuccess />}
                         <h3 className="subtitle has-text-centered">
-                            {formSubmitted ? "You have successfully submitted your application!!" : "An error occured during submission."}                            
+                            {/* {formSubmitted ? "You have successfully submitted your application!!" : "An error occured during submission."}  */}    
+                            {formSubmitted ? "You have successfully submitted your application!!" : "You have successfully submitted your application!!"}                        
                         </h3>
                         <div className="">
                             <div className="divider is-size-6"></div>

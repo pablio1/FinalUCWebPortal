@@ -90,6 +90,7 @@ class Login extends Component {
                             activeterms: data.active_terms,
                             hasactiveterm: data.has_active_term,
                             curryear: data.curr_year,
+                            dept: data.dept,
                             allowedunits: data.allowed_units
                         }
                         console.log("user", user);
