@@ -17,14 +17,15 @@ export class RequestSubjects extends Component {
             course_code: getLoggedUserDetails("coursecode"),
             term : process.env.REACT_APP_CURRENT_SCHOOL_TERM
         }
-         getStudentRequest(data)
+        console.log("test",data);
+        getStudentRequest(data)
          .then(response => {  
             if(response.data) {          
                 this.setState({
                     requestSubjects: response.data.request
                 });
             }
-        }); 
+        });
         //console.log(getLoggedUserDetails("idnumber"));
         if(getLoggedUserDetails("curryear") != 0 ){
             var data = {
@@ -225,7 +226,7 @@ export class RequestSubjects extends Component {
             return {  value: subject.internal_code, label: subject.subject_name}
         }):[];
 
-        var loadContent = getLoggedUserDetails("curryear")!=0?(
+        var loadContent = (getLoggedUserDetails("curryear")!=0)?(
             <Fragment>
                 <div className="column is-two-thirds">
                     <RequestedSubjects 
@@ -269,6 +270,15 @@ export class RequestSubjects extends Component {
                         </div>
                     </article>
                 }
+                {  (getLoggedUserDetails("classification")=="H" && getLoggedUserDetails("yearlevel") == 1) &&
+                    <article className="message is-info mb-2">
+                        <div className="message-body">
+                            <h4 className="is-size-6">
+                                For now, new students cant request subjects.
+                            </h4>                            
+                        </div>
+                    </article>
+                }
                 <article className="message is-danger mb-2">
                     <div className="message-body">
                         <h4 className="is-size-7">
@@ -280,7 +290,7 @@ export class RequestSubjects extends Component {
                     </div>
                 </article>
                 <div className="columns">
-                    {loadContent}
+                    {(getLoggedUserDetails("classification")!="H")? loadContent : (getLoggedUserDetails("yearlevel") != 1)? loadContent: "" }
                 </div> 
             </div>
         </Fragment>
