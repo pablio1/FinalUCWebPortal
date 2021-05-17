@@ -9,6 +9,14 @@ export default class ViewSchedule extends Component {
         showHide: false, equivalence: null
     }
     componentDidMount= () => {
+        
+        
+    }
+    handleAlternativeButton = () => {
+        const{showHide} = this.state;
+        this.setState({
+            showHide: !showHide
+        });
         var data = {
             internal_code : this.props.internal_code
         }
@@ -18,15 +26,10 @@ export default class ViewSchedule extends Component {
                 this.setState({
                     equivalence: response.data.subjects
                 });
-                console.log(response.data);
+                console.log("equivalence", response.data);
+                console.log("schedules",this.props.schedules);
             }
         })
-    }
-    handleAlternativeButton = () => {
-        const{showHide} = this.state;
-        this.setState({
-            showHide: !showHide
-        });
     }
 
   render() {
@@ -67,7 +70,7 @@ export default class ViewSchedule extends Component {
 
       var loadAlternativeSubjects = equivalence ? equivalence.map((sched, index)=>{
         countAlternative++;
-        const splitCodes = schedules.filter(splt => splt.edp_code == sched.internal_code).map((split, isplit)=>{
+        const splitCodes = schedules.filter(splt => splt.internal_code == sched.split_code).map((split, isplit)=>{
             return(
                 <tr key={isplit} className="has-background-link-light">
                     <td className="valign pt-0 pb-0">{split.edp_code}</td>
@@ -79,18 +82,22 @@ export default class ViewSchedule extends Component {
                 </tr>
             )
         });
-        return (
-            <Fragment>
-                <tr key={index}>
-                    <td>{sched.edp_code}</td>
-                    <td>{sched.subject_type}</td>
-                    <td>{sched.time_start}-{sched.time_end} {sched.mdn}</td>
-                    <td>{sched.days}</td>
-                    <td></td>
-                </tr>
-                {splitCodes}
-            </Fragment>
-        )
+        const schedEquival = schedules? schedules.filter(fil => fil.internal_code == sched.internal_code).map((schedule, index)=>{
+            return (
+                <Fragment>
+                    <tr key={index}>
+                        <td>{schedule.edp_code}</td>
+                        <td>{schedule.subject_code}</td>
+                        <td>{schedule.subject_type}</td>
+                        <td>{schedule.time_start}-{schedule.time_end} {schedule.mdn}</td>
+                        <td>{schedule.days}</td>
+                        <td>{schedule.room}</td>
+                    </tr>
+                    {splitCodes}
+                </Fragment>
+            )
+        }):"";
+        return schedEquival;
       }) : "";
     return (
         <Fragment>
